@@ -1,0 +1,327 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Student Portal</title>
+    
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    
+
+    <style>
+        :root {
+            --sidebar-bg: #0f172a;
+            --sidebar-hover: #1e293b;
+            --accent-blue: #3b82f6;
+            --text-muted: #94a3b8;
+            --body-bg: #f8fafc;
+            --transition-speed: 0.3s;
+            --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: var(--body-bg);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Base Styling */
+        .sidebar {
+            min-height: 100vh;
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1040;
+            transition: transform var(--transition-speed) var(--transition-timing), 
+                        width var(--transition-speed) var(--transition-timing);
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        /* Smooth Inline Text Properties */
+        .sidebar .brand span,
+        .sidebar .nav-link span {
+            display: inline-block;
+            white-space: nowrap;
+            max-width: 200px;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity var(--transition-speed) var(--transition-timing),
+                        max-width var(--transition-speed) var(--transition-timing),
+                        visibility var(--transition-speed) var(--transition-timing),
+                        margin var(--transition-speed) var(--transition-timing);
+        }
+
+        /* 🌟 NO MEDIA QUERY: Pure Class-Driven Collapse States */
+        .sidebar.collapsed {
+            width: 78px;
+        }
+        
+        .sidebar.collapsed .brand span,
+        .sidebar.collapsed .nav-link span {
+            max-width: 0 !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            margin: 0 !important;
+        }
+        
+        .sidebar.collapsed .brand {
+            padding: 24px 0;
+            justify-content: center !important;
+        }
+        
+        .sidebar.collapsed .nav-link {
+            justify-content: center;
+            padding: 14px 0;
+            border-left-width: 0;
+            gap: 0;
+        }
+        
+        .sidebar.collapsed #hideSidebarBtn i {
+            transform: rotate(180deg);
+        }
+
+        .sidebar .brand {
+            padding: 24px 20px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #1e293b;
+            transition: padding var(--transition-speed) var(--transition-timing);
+        }
+
+        /* Interactive Sidebar Hide Button */
+        #hideSidebarBtn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            transition: all 0.25s ease;
+        }
+        #hideSidebarBtn i {
+            transition: transform var(--transition-speed) var(--transition-timing);
+            display: inline-block;
+        }
+        #hideSidebarBtn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .sidebar .nav-link {
+            color: var(--text-muted);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease, gap var(--transition-speed) var(--transition-timing);
+            border-left: 4px solid transparent;
+        }
+        .sidebar .nav-link i {
+            font-size: 1.15rem;
+            min-width: 20px;
+            text-align: center;
+        }
+        .sidebar .nav-link:hover {
+            color: #fff;
+            background-color: var(--sidebar-hover);
+        }
+        .sidebar .nav-link.active {
+            color: #fff;
+            background-color: var(--sidebar-hover);
+            border-left-color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        /* Main Content Wrapper Styling */
+        .main-wrapper {
+            margin-left: 260px;
+            transition: margin-left var(--transition-speed) var(--transition-timing);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 🌟 NO MEDIA QUERY: Content shifts dynamically alongside active class */
+        .main-wrapper.expanded {
+            margin-left: 78px;
+        }
+
+        /* Top Navbar Styling */
+        .top-navbar {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
+        
+        .content-body {
+            padding: 32px;
+            flex-grow: 1;
+        }
+
+        .avatar-box {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            font-weight: 600;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.4);
+            z-index: 1035;
+            backdrop-filter: blur(2px);
+        }
+
+        /* Remaining Mobile Overrides for Off-Canvas layout logic */
+        media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-260px);
+            }
+            .main-wrapper {
+                margin-left: 0 !important;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .sidebar-overlay.active {
+                display: block;
+            }
+            .top-navbar {
+                padding: 16px 20px;
+            }
+            .content-body {
+                padding: 20px;
+            }
+            #hideSidebarBtn {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="brand d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-mortarboard-fill text-primary fs-3"></i>
+                <span>Student Portal</span>
+            </div>
+            <button id="hideSidebarBtn" type="button" title="Toggle Navigation">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+        </div>
+        
+        <div class="nav flex-column mt-3">
+            <a class="nav-link active" asp-area="Student" asp-controller="Dashboard" asp-action="Index">
+                <i class="bi bi-grid-1x2-fill"></i> <span>Dashboard</span>
+            </a>
+            <a class="nav-link" asp-area="Student" asp-controller="Courses" asp-action="MyCourses">
+                <i class="bi bi-book-half"></i> <span>My Courses</span>
+            </a>
+            <a class="nav-link" asp-area="Student" asp-controller="Schedule" asp-action="Index">
+                <i class="bi bi-calendar3"></i> <span>Class Schedule</span>
+            </a>
+            <a class="nav-link" asp-area="Student" asp-controller="Grades" asp-action="Index">
+                <i class="bi bi-award-fill"></i> <span>Grades & Reports</span>
+            </a>
+            <a class="nav-link" asp-area="Student" asp-controller="Profile" asp-action="Settings">
+                <i class="bi bi-sliders"></i> <span>Settings</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="main-wrapper" id="main-content">
+        <header class="top-navbar d-flex justify-content-between align-items-center">
+            <button class="btn btn-light border d-lg-none" id="sidebarToggle">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+            
+            <div class="search-bar d-none d-sm-block">
+                <span class="badge bg-light text-dark border p-2 fw-semibold">
+                    <i class="bi bi-clock-history me-1 text-primary"></i> Academic Year: 2026/2027
+                </span>
+            </div>
+            
+            <div class="dropdown">
+                <button class="btn btn-link text-decoration-none dropdown-toggle text-dark d-flex align-items-center gap-2 border-0 p-0" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="avatar-box text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm">
+                        <i class="bi bi-person"></i>
+                    </div>
+                    <div class="text-start d-none d-md-block me-1">
+                        <div class="fw-bold small lh-1">@User.Identity?.Name</div>
+                        <span class="text-muted" style="font-size: 11px;">Student</span>
+                    </div>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm border mt-2" aria-labelledby="userMenu">
+                    <li>
+                        <a class="dropdown-item py-2 d-flex align-items-center gap-2" asp-area="Student" asp-controller="Profile" asp-action="Index">
+                            <i class="bi bi-person text-muted"></i> My Profile
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <form class="form-inline" asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                            <button type="submit" class="dropdown-item text-danger py-2 d-flex align-items-center gap-2">
+                                <i class="bi bi-box-arrow-right"></i> Sign Out
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+        <main class="content-body">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+   <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+   
+    
+   
+
+    <script>
+        $(document).ready(function () {
+            // Mobile toggle functionality (Offcanvas drawer)
+            $('#sidebarToggle, #sidebarOverlay').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $('#sidebarOverlay').toggleClass('active');
+            });
+
+            // Desktop mini-sidebar collapse handler
+            $('#hideSidebarBtn').on('click', function () {
+                $('#sidebar').toggleClass('collapsed');
+                $('#main-content').toggleClass('expanded');
+            });
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,120 @@
+﻿@model RegisterVM
+
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+        <div class="card account-card shadow-lg border-0">
+            <div class="card-body p-4 p-md-5">
+
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-plus-fill fs-1 text-primary"></i>
+                    <h2 class="fw-bold mt-2">Create Account</h2>
+                    <p class="text-muted">
+                        Join the School Management System
+                    </p>
+                </div>
+
+                <form asp-action="Register" method="post">
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="alert alert-danger">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input asp-for="FName"
+                                       class="form-control"
+                                       placeholder="First Name" />
+                                <label asp-for="FName"></label>
+                                <span asp-validation-for="FName"
+                                      class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input asp-for="LName"
+                                       class="form-control"
+                                       placeholder="Last Name" />
+                                <label asp-for="LName"></label>
+                                <span asp-validation-for="LName"
+                                      class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="UserName"
+                               class="form-control"
+                               placeholder="Username" />
+                        <label asp-for="UserName"></label>
+                        <span asp-validation-for="UserName"
+                              class="text-danger small"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Email"
+                               class="form-control"
+                               placeholder="Email Address" />
+                        <label asp-for="Email"></label>
+                        <span asp-validation-for="Email"
+                              class="text-danger small"></span>
+                    </div>
+
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Password"
+                               class="form-control"
+                               placeholder="Password" />
+                        <label asp-for="Password"></label>
+                        <span asp-validation-for="Password"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-floating mb-4">
+                        <input asp-for="ConfirmPassword"
+                               class="form-control"
+                               placeholder="Confirm Password" />
+                        <label asp-for="ConfirmPassword"></label>
+                        <span asp-validation-for="ConfirmPassword"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit"
+                                class="btn btn-primary btn-lg">
+                            <i class="bi bi-person-check-fill me-2"></i>
+                            Create Account
+                        </button>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <div class="text-center">
+                        <span class="text-muted">
+                            Already have an account?
+                        </span>
+
+                        <a asp-action="Login"
+                               asp-controller="Account"
+                               class="fw-semibold text-decoration-none">
+                            Sign In
+                        </a>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_Notification" />
+}

@@ -1,0 +1,183 @@
+﻿
+@{
+    var notifications = new Dictionary<string, string>
+    {
+        { "success_notification", "success" },
+        { "error_notification", "error" },
+        { "warning_notification", "warning" },
+        { "info_notification", "info" }
+    };
+}
+
+<style>
+    :root {
+        --radius: 14px;
+        --shadow: 0 10px 25px rgba(0,0,0,.08);
+        --font: "Segoe UI", sans-serif;
+    }
+
+    #toast-container {
+        padding: 20px;
+        z-index: 999999 !important;
+    }
+
+    #toast-container > div {
+        border-radius: var(--radius) !important;
+        box-shadow: var(--shadow) !important;
+        font-family: var(--font);
+        padding: 18px 18px 18px 65px !important;
+        width: 420px !important;
+        max-width: 95vw;
+        position: relative;
+        overflow: hidden;
+
+        animation: schoolToast .35s ease forwards;
+    }
+
+    @@keyframes schoolToast {
+        from {
+            opacity: 0;
+            transform: translateY(-15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    #toast-container .toast-title {
+        font-weight: 700;
+        font-size: 15px;
+        margin-bottom: 5px;
+    }
+
+    #toast-container .toast-message {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    #toast-container .toast-progress {
+        height: 4px;
+    }
+
+    #toast-container .toast-close-button {
+        right: 12px;
+        top: 10px;
+        font-size: 20px;
+    }
+
+    /* Success */
+    .toast-success {
+        background-color: #ecfdf5 !important;
+        color: #166534 !important;
+        border-left: 5px solid #22c55e;
+    }
+
+    /* Error */
+    .toast-error {
+        background-color: #fef2f2 !important;
+        color: #991b1b !important;
+        border-left: 5px solid #ef4444;
+    }
+
+    /* Warning */
+    .toast-warning {
+        background-color: #fffbeb !important;
+        color: #92400e !important;
+        border-left: 5px solid #f59e0b;
+    }
+
+    /* Info */
+    .toast-info {
+        background-color: #eff6ff !important;
+        color: #1d4ed8 !important;
+        border-left: 5px solid #3b82f6;
+    }
+</style>
+
+<script>
+    toastr.options = {
+        closeButton: true,
+        progressBar: true,
+        newestOnTop: true,
+        preventDuplicates: true,
+        positionClass: "toast-top-right",
+
+        showDuration: "300",
+        hideDuration: "300",
+
+        timeOut: "5000",
+        extendedTimeOut: "1500",
+
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut"
+    };
+</script>
+
+@foreach (var notification in notifications)
+{
+    if (TempData[notification.Key] is string message &&
+        !string.IsNullOrWhiteSpace(message))
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+
+                const message =
+                @Html.Raw(System.Text.Json.JsonSerializer.Serialize(message));
+
+                const text = message.toLowerCase();
+
+                let icon = "🔔";
+                let title = "Notification";
+
+                if (text.includes("student")) {
+                    icon = "🎓";
+                    title = "Student";
+                }
+                else if (text.includes("teacher")) {
+                    icon = "👨‍🏫";
+                    title = "Teacher";
+                }
+                else if (text.includes("attendance")) {
+                    icon = "📅";
+                    title = "Attendance";
+                }
+                else if (text.includes("grade") || text.includes("exam")) {
+                    icon = "📝";
+                    title = "Grades";
+                }
+                else if (text.includes("course") || text.includes("subject")) {
+                    icon = "📚";
+                    title = "Course";
+                }
+                else if (text.includes("schedule") || text.includes("timetable")) {
+                    icon = "⏰";
+                    title = "Schedule";
+                }
+                else if (text.includes("payment") || text.includes("fee")) {
+                    icon = "💳";
+                    title = "Fees";
+                }
+                else if (text.includes("announcement")) {
+                    icon = "📢";
+                    title = "Announcement";
+                }
+
+                const titles = {
+                    success: `${icon} ${title}`,
+                    error: `❌ ${title}`,
+                    warning: `⚠️ ${title}`,
+                    info: `ℹ️ ${title}`
+                };
+
+                toastr["@notification.Value"](
+                    message,
+                    titles["@notification.Value"]
+                );
+            });
+        </script>
+
+        break;
+    }
+}
+```
