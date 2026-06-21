@@ -46,12 +46,7 @@ namespace School_Management_System.Areas.Identity.Controllers
             if (userNameOrEmail == null)
                 return NotFound();
             var checkPassword = await _userManager.CheckPasswordAsync(userNameOrEmail, userLogin.Pssword);
-            //if (!checkPassword)
-            //{
-            //    ModelState.AddModelError(userLogin.EmailOrUserName, "User Name or Email is Not Valid");
-            //    ModelState.AddModelError(userLogin.Pssword, "Password is Not Valid");
-            //}
-            //await _signInManager.SignInAsync(userNameOrEmail, isPersistent: userLogin.IsPersistent);
+
             var signIn = await _signInManager.PasswordSignInAsync(userNameOrEmail, userLogin.Pssword, userLogin.IsPersistent, true);
             if (!signIn.Succeeded)
             {
@@ -59,7 +54,7 @@ namespace School_Management_System.Areas.Identity.Controllers
                 ModelState.AddModelError(userLogin.Pssword, "Password is Not Valid");
                 return View(userLogin);
             }
-            
+
             return RedirectToAction("Index", "Home", new { area = "Student" });
         }
         public async Task<IActionResult> LogOut()
@@ -122,5 +117,29 @@ namespace School_Management_System.Areas.Identity.Controllers
             return RedirectToAction(nameof(LogIn));
 
         }
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordVM? userChangePassword)
+        {
+            if (!ModelState.IsValid || userChangePassword is null)
+                return View(userChangePassword);
+
+            var user =await _userManager.FindByEmailAsync(userChangePassword.EmailOrUserName!) ?? 
+                await _userManager.FindByNameAsync(userChangePassword.EmailOrUserName!);
+            if (user is null)
+                return NotFound();
+          var result=  await _userManager.ChangePasswordAsync(user, userChangePassword.OldPassword!, userChangePassword.NewPassword!);
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty,string.Join(",",result.Errors.Select(e => e.Description)));
+            }
+            TempData["success_notification"] = " Password Change Successfully.. ";
+            return RedirectToAction(nameof(LogIn));
+        }
+
     }
 }
