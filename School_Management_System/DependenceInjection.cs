@@ -11,7 +11,9 @@ namespace School_Management_System
         {
             services.AddScoped<IAccountServices, AccountServices>();
             services.AddScoped<IEmailSender,EmailSender>();
-            services.AddScoped<IRepository<Student>, Repository<Student>>();
+            services.AddScoped<IRepository<UserOTP>,Repository<UserOTP>>();
+            services.AddScoped<IEmailSender,EmailSender>();
+            services.AddScoped<IUnitOfWork,UnitOfWork>();
         }
     }
 }

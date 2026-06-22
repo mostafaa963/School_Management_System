@@ -4,11 +4,14 @@
     {
         private readonly ApplicationDbContext _applicationDbContext;
 
-        public IRepository<Student> Student { get; private set; }
-        public UnitOfWork(IRepository<Student> student, ApplicationDbContext applicationDbContext)
+        //public IRepository<Student> Student { get; private set; }
+        public  IRepository<UserOTP> UserOtp { get; private set; }
+        public UnitOfWork(ApplicationDbContext applicationDbContext)
         {
             _applicationDbContext= applicationDbContext;
-            Student = student;
+            //Student = student;
+            UserOtp= new Repository<UserOTP>(_applicationDbContext);
+
         }
 
 

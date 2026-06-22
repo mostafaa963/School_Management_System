@@ -2,7 +2,8 @@
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<Student> Student { get; }
+        //IRepository<Student> Student { get; }
+        IRepository<UserOTP> UserOtp { get; }
         int SaveChange();
     }
 }

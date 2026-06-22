@@ -11,7 +11,6 @@ namespace School_Management_System.DataAccess
         { }
 
         public DbSet<User> Users { get; set; }
-        //public DbSet<Role> Roles { get; set; }
         public DbSet<Class> Classes { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Subject> Subjects { get; set; }
@@ -20,6 +19,7 @@ namespace School_Management_System.DataAccess
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Exam> Exams { get; set; }
         public DbSet<Mark> Marks { get; set; }
+        public DbSet<UserOTP> UserOTPs { get; set; }
         
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using School_Management_System.Services.UnitOfWork;
 using School_Management_System.Utilities;
 using Stripe.Reporting;
 using System.Security.Claims;
@@ -17,9 +18,11 @@ namespace School_Management_System.Services.AccountServices
     {
         private readonly UserManager<User> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AccountServices(UserManager<User> userManager, IEmailSender emailSender)
+        public AccountServices(IUnitOfWork unitOfWork, UserManager<User> userManager, IEmailSender emailSender)
         {
+            _unitOfWork = unitOfWork;
             _userManager = userManager;
             _emailSender = emailSender;
         }
@@ -46,7 +49,20 @@ namespace School_Management_System.Services.AccountServices
                         message = $"<h1>Confirm Your Account By Clicking <a href='{Url}'>Here</a></h1>";
                     }
                     break;
+                case EmailType.ForgetPassword:
+                    {
+                        var Opt = new Random().Next(1000, 9999).ToString();
+                        await _unitOfWork.UserOtp.AddAsync(new UserOTP
+                        {
+                            UserID= user.Id,
+                            OTP=Opt,
+                        });
+                        _unitOfWork.SaveChange();
+                        subject = " Reset Password  Your Account in School Management System  APP";
+                        message = $"<h1>Number Of Verify : {Opt}</h1>";
 
+                    }
+                    break;
             }
 
             await _emailSender.SendEmailAsync(user.Email!, subject, message);
