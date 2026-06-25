@@ -57,7 +57,7 @@ namespace School_Management_System.Services.AccountServices
                             UserID= user.Id,
                             OTP=Opt,
                         });
-                        _unitOfWork.SaveChange();
+                        _unitOfWork.SaveChangeAsync();
                         subject = " Reset Password  Your Account in School Management System  APP";
                         message = $"<h1>Number Of Verify : {Opt}</h1>";
 

@@ -60,6 +60,7 @@ namespace School_Management_System.Areas.Identity.Controllers
                 ModelState.AddModelError(userLogin.Pssword, "Password is Not Valid");
                 return View(userLogin);
             }
+            TempData["success_notification"] = $"Welcome Back {userNameOrEmail!.FullName}";
 
             return RedirectToAction("Index", "Home", new { area = "Student" });
         }
@@ -200,7 +201,7 @@ namespace School_Management_System.Areas.Identity.Controllers
             }
             otp.IsUsed = true;
             _unitOfWork.UserOtp.Update(otp);
-            _unitOfWork.SaveChange();
+            _unitOfWork.SaveChangeAsync();
 
             return RedirectToAction(nameof(NewPassword));
 

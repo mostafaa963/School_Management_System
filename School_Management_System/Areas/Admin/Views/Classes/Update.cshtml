@@ -1,0 +1,44 @@
+﻿@model UpdateClassVM
+
+@{
+    ViewData["Title"] = "Update Class";
+}
+
+## Update Class
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Update" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group mb-3">
+                <label asp-for="ClassName" class="control-label fw-bold">Class Name</label>
+                <input asp-for="ClassName" class="form-control" />
+                <span asp-validation-for="ClassName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Section" class="control-label fw-bold">Section</label>
+                <input asp-for="Section" class="form-control" />
+                <span asp-validation-for="Section" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Capacity" class="control-label fw-bold">Capacity</label>
+                <input asp-for="Capacity" class="form-control" type="number" />
+                <span asp-validation-for="Capacity" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -32,6 +32,6 @@ namespace School_Management_System.Models
         // Navigation properties
         [ForeignKey("UserID")]
         public virtual User UserProfile { get; set; }
-        public virtual ICollection<TeacherAllocation> Allocations { get; set; }
+        public virtual IEnumerable<TeacherAllocation> Allocations { get; set; }
     }
 }

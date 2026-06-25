@@ -10,9 +10,7 @@ namespace School_Management_System.Models
 
         public string? UserID { get; set; } // Nullable if login account isn't required immediately
 
-        [Required]
-        [StringLength(20)]
-        public string RollNumber { get; set; }
+      
 
         [Required]
         [StringLength(50)]

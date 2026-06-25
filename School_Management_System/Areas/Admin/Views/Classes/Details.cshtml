@@ -1,0 +1,48 @@
+﻿@model ClassDetailsVM
+
+@{
+    ViewData["Title"] = "Class Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0">Class Details</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>Class Name:</strong>
+                            <span>@Model.ClassName</span>
+                        </li>
+                        
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>Current Student Count:</strong>
+                            <span class="badge bg-info rounded-pill">@Model.Count</span>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="mb-2">
+                                <strong class="d-block mb-1">Section:</strong>
+                                <input asp-for="Section" class="form-control" readonly />
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="mb-2">
+                                <strong class="d-block mb-1">Capacity:</strong>
+                                <input asp-for="Capacity" class="form-control" type="number" readonly />
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-light">
+            <a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+        </div>
+    </div>
+</div>

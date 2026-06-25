@@ -1,9 +1,13 @@
 ﻿namespace School_Management_System.Services.UnitOfWork
 {
+    
     public interface IUnitOfWork : IDisposable
     {
-        //IRepository<Student> Student { get; }
+        IRepository<Student> Student { get; }
+        IRepository<Class> Class { get; }
+        IRepository<Teacher> Teacher { get; }
         IRepository<UserOTP> UserOtp { get; }
-        int SaveChange();
+        IRepository<TeacherAllocation> TeacherAllocation { get; }
+        Task<int> SaveChangeAsync();
     }
 }

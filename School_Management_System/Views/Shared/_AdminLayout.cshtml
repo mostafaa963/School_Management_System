@@ -3,13 +3,12 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Student Portal</title>
+    <title>@ViewData["Title"] - Admin Panel</title>
     
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    
 
     <style>
         :root {
@@ -57,7 +56,7 @@
                         margin var(--transition-speed) var(--transition-timing);
         }
 
-        /* 🌟 NO MEDIA QUERY: Pure Class-Driven Collapse States */
+        /* Class-Driven Collapse States */
         .sidebar.collapsed {
             width: 78px;
         }
@@ -155,7 +154,6 @@
             flex-direction: column;
         }
         
-        /* 🌟 NO MEDIA QUERY: Content shifts dynamically alongside active class */
         .main-wrapper.expanded {
             margin-left: 78px;
         }
@@ -180,7 +178,7 @@
         .avatar-box {
             width: 38px;
             height: 38px;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            background: linear-gradient(135deg, #ef4444, #b91c1c); /* Shifted to Admin Red gradient */
             font-weight: 600;
         }
 
@@ -193,7 +191,7 @@
             backdrop-filter: blur(2px);
         }
 
-        /* Remaining Mobile Overrides for Off-Canvas layout logic */
+        /* Responsive Mobile Overrides */
         media (max-width: 992px) {
             .sidebar {
                 transform: translateX(-260px);
@@ -218,6 +216,7 @@
             }
         }
     </style>
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
 
@@ -226,29 +225,39 @@
     <div class="sidebar" id="sidebar">
         <div class="brand d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center gap-2">
-                <i class="bi bi-mortarboard-fill text-primary fs-3"></i>
-                <span>Student Portal</span>
+                <i class="bi bi-shield-lock-fill text-danger fs-3"></i>
+                <span>Admin Panel</span>
             </div>
             <button id="hideSidebarBtn" type="button" title="Toggle Navigation">
                 <i class="bi bi-chevron-left"></i>
             </button>
         </div>
         
+        @{
+            var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        }
+
         <div class="nav flex-column mt-3">
-            <a class="nav-link active" asp-area="Student" asp-controller="Dashboard" asp-action="Index">
-                <i class="bi bi-grid-1x2-fill"></i> <span>Dashboard</span>
+            <a class="nav-link @(currentController == "Dashboard" ? "active" : "")" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
             </a>
-            <a class="nav-link" asp-area="Student" asp-controller="Courses" asp-action="MyCourses">
-                <i class="bi bi-book-half"></i> <span>My Courses</span>
+            <a class="nav-link @(currentController == "Classes" ? "active" : "")" asp-area="Admin" asp-controller="Classes" asp-action="Index">
+                <i class="bi bi-building"></i> <span>Classes & Sections</span>
             </a>
-            <a class="nav-link" asp-area="Student" asp-controller="Schedule" asp-action="Index">
-                <i class="bi bi-calendar3"></i> <span>Class Schedule</span>
+            <a class="nav-link @(currentController == "Subject" ? "active" : "")" asp-area="Admin" asp-controller="Subject" asp-action="Index">
+                <i class="bi bi-book"></i> <span>Subjects Catalog</span>
             </a>
-            <a class="nav-link" asp-area="Student" asp-controller="Grades" asp-action="Index">
-                <i class="bi bi-award-fill"></i> <span>Grades & Reports</span>
+            <a class="nav-link @(currentController == "Allocation" ? "active" : "")" asp-area="Admin" asp-controller="Allocation" asp-action="Index">
+                <i class="bi bi-diagram-3"></i> <span>Teacher Allocations</span>
             </a>
-            <a class="nav-link" asp-area="Student" asp-controller="Profile" asp-action="Settings">
-                <i class="bi bi-sliders"></i> <span>Settings</span>
+            <a class="nav-link @(currentController == "Teacher" ? "active" : "")" asp-area="Admin" asp-controller="Teacher" asp-action="Index">
+                <i class="bi bi-person-workspace"></i> <span>Manage Faculty</span>
+            </a>
+            <a class="nav-link @(currentController == "Student" ? "active" : "")" asp-area="Admin" asp-controller="Student" asp-action="Index">
+                <i class="bi bi-people"></i> <span>Student Admissions</span>
+            </a>
+            <a class="nav-link @(currentController == "Exam" ? "active" : "")" asp-area="Admin" asp-controller="Exam" asp-action="Index">
+                <i class="bi bi-journal-check"></i> <span>Exam Schedules</span>
             </a>
         </div>
     </div>
@@ -261,30 +270,30 @@
             
             <div class="search-bar d-none d-sm-block">
                 <span class="badge bg-light text-dark border p-2 fw-semibold">
-                    <i class="bi bi-clock-history me-1 text-primary"></i> Academic Year: 2026/2027
+                    <i class="bi bi-shield-check me-1 text-danger"></i> Environment: Secure Administration
                 </span>
             </div>
             
             <div class="dropdown">
                 <button class="btn btn-link text-decoration-none dropdown-toggle text-dark d-flex align-items-center gap-2 border-0 p-0" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
                     <div class="avatar-box text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm">
-                        <i class="bi bi-person"></i>
+                        <i class="bi bi-person-gear"></i>
                     </div>
                     <div class="text-start d-none d-md-block me-1">
                         <div class="fw-bold small lh-1">@User.Identity?.Name</div>
-                        <span class="text-muted" style="font-size: 11px;">Student</span>
+                        <span class="text-danger" style="font-size: 11px; font-weight: 600;">Administrator</span>
                     </div>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm border mt-2" aria-labelledby="userMenu">
                     <li>
-                        <a class="dropdown-item py-2 d-flex align-items-center gap-2" asp-area="Student" asp-controller="Profile" asp-action="Index">
-                            <i class="bi bi-person text-muted"></i> My Profile
+                        <a class="dropdown-item py-2 d-flex align-items-center gap-2" asp-area="Admin" asp-controller="Profile" asp-action="Index">
+                            <i class="bi bi-person text-muted"></i> System Profile
                         </a>
                     </li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
-                        <form class="form-inline" asp-area="Identity" asp-controller="Account" asp-action="LogOut" >
-                            <button type="submit" class="dropdown-item text-danger py-2 d-flex align-items-center gap-2">
+                        <form class="form-inline" asp-area="Identity" asp-controller="Account" asp-action="LogOut">
+                            <button type="submit" class="dropdown-item text-danger py-2 d-flex align-items-center gap-2 w-100 border-0 bg-transparent">
                                 <i class="bi bi-box-arrow-right"></i> Sign Out
                             </button>
                         </form>
@@ -300,20 +309,17 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-   <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-   
-    
-   
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
         $(document).ready(function () {
-            // Mobile toggle functionality (Offcanvas drawer)
+            // Mobile offcanvas drawer control
             $('#sidebarToggle, #sidebarOverlay').on('click', function () {
                 $('#sidebar').toggleClass('active');
                 $('#sidebarOverlay').toggleClass('active');
             });
 
-            // Desktop mini-sidebar collapse handler
+            // Desktop sidebar collapse control
             $('#hideSidebarBtn').on('click', function () {
                 $('#sidebar').toggleClass('collapsed');
                 $('#main-content').toggleClass('expanded');

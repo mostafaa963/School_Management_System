@@ -16,6 +16,6 @@ namespace School_Management_System.Models
         public string SubjectCode { get; set; }
 
         // Navigation properties
-        public virtual ICollection<TeacherAllocation> Allocations { get; set; }
+        public  IEnumerable<TeacherAllocation> Allocations { get; set; }
     }
 }

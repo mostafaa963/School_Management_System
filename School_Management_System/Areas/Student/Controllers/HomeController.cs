@@ -20,11 +20,13 @@ namespace School_Management_System.Areas.Student.Controllers
             _userManager = userManager;
         }
 
+        [HttpGet] 
         public async Task<IActionResult> Index()
         {
-        
+
             var user = await _userManager.GetUserAsync(User);
-            TempData["success_notification"] = $"Welcome Back {user!.FullName}";
+            
+          
 
             //TempData["info_notification"] = $"Welcome Back {user!.FullName}";
             return View();

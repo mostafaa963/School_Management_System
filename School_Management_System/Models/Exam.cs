@@ -15,6 +15,6 @@ namespace School_Management_System.Models
         [StringLength(20)]
         public string Term { get; set; }
 
-        public virtual ICollection<Mark> Marks { get; set; }
+        public  IEnumerable<Mark> Marks { get; set; }
     }
 }
