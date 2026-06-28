@@ -9,6 +9,7 @@ namespace School_Management_System.Services.UnitOfWork
         void Delete(T entity);
         Task<T?> GetOneById(int Id);
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? criteria = null,
+           Expression<Func<T, bool>>? filter = null,
             bool isNoTracking = false,
            TypeOfOrder typoOFOrder = TypeOfOrder.Ascending,
            Expression<Func<T, object>>? orderBy = null,

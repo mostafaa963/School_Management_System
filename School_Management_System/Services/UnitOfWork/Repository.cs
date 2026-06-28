@@ -33,15 +33,18 @@ namespace School_Management_System.Services.UnitOfWork
             _dbSet.Remove(entity);
         }
         public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? criteria = null,
+            Expression<Func<T, bool>>? filter = null,
             bool isNoTracking = false,
             TypeOfOrder typoOFOrder = TypeOfOrder.Ascending,
             Expression<Func<T, object>>? orderBy = null,
             params Expression<Func<T, object>>[] include)
         {
-            
+
             var query = _dbSet.AsQueryable();
             if (isNoTracking)
                 query = _dbSet.AsNoTracking().AsQueryable();
+            if (filter != null)
+                query = query.Where(filter);
             if (criteria != null)
                 query = query.Where(criteria);
             if (include != null)
@@ -68,14 +71,14 @@ namespace School_Management_System.Services.UnitOfWork
             Expression<Func<T, object>>? orderBy = null,
             params Expression<Func<T, object>>[] include)
         {
-           var entities= await GetAllAsync(criteria, isNoTracking, typoOFOrder, orderBy, include);    
+            var entities = await GetAllAsync(criteria, filter: null, isNoTracking, typoOFOrder, orderBy, include);
             return entities.FirstOrDefault();
         }
         public async Task<T?> GetOneById(int Id)
         {
-            
+
             var entity = await _dbSet.FindAsync(Id);
-             
+
             return entity;
         }
     }

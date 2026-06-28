@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using School_Management_System.DataAccess;
+using School_Management_System.MiddleWare;
 using School_Management_System.Models;
 using School_Management_System.Services;
 using School_Management_System.Utilities;
@@ -40,8 +42,20 @@ namespace School_Management_System
             });
 
             builder.Services.Configure();
+            //builder.Services.AddRateLimiter(options =>
+            //{
+            //    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+            //    options.AddFixedWindowLimiter("MyCustomPolicy", opt =>
+            //    {
+            //        opt.PermitLimit = 5;
+            //        opt.Window = TimeSpan.FromSeconds(10);
+            //        opt.QueueLimit = 0;
+            //    });
+            //});
 
             var app = builder.Build();
+
             await SeedServices.SeedData(app.Services);
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -51,13 +65,18 @@ namespace School_Management_System
                 app.UseHsts();
             }
 
+            app.MapStaticAssets();
             app.UseHttpsRedirection();
+
+            //app.UseRateLimiter();
+            app.UseMiddleware<LimitingRequest>();
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapStaticAssets();
+
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{area=Student}/{controller=Home}/{action=Index}/{id?}")

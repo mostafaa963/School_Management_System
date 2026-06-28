@@ -4,6 +4,7 @@
     public interface IUnitOfWork : IDisposable
     {
         IRepository<Student> Student { get; }
+        IRepository<Subject> Subject { get; }
         IRepository<Class> Class { get; }
         IRepository<Teacher> Teacher { get; }
         IRepository<UserOTP> UserOtp { get; }

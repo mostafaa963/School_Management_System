@@ -1,0 +1,67 @@
+﻿@model CreateSubjectVM
+
+@{
+    ViewData["Title"] = "Add New Subject";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            
+            <!-- Header Section -->
+            <div class="mb-4">
+                <h2 class="text-dark fw-extrabold mb-1 tracking-tight">Add New Subject</h2>
+                <p class="text-muted small mb-0">Create a new academic curriculum subject entry.</p>
+            </div>
+
+            <!-- Form Card -->
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post">
+                        
+                        @* <!-- Global Validation Summary -->
+                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div> *@
+
+                        <!-- Subject Name Field -->
+                        <div class="mb-3">
+                            <label asp-for="SubjectName" class="form-label fw-semibold text-dark small"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-book"></i></span>
+                                <input asp-for="SubjectName" class="form-control bg-light border-start-0 ps-0" placeholder="e.g., Advanced Mathematics" />
+                            </div>
+                            <span asp-validation-for="SubjectName" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <!-- Subject Code Field -->
+                        <div class="mb-4">
+                            <label asp-for="SubjectCode" class="form-label fw-semibold text-dark small"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-code-slash"></i></span>
+                                <input asp-for="SubjectCode" class="form-control bg-light border-start-0 ps-0" placeholder="e.g., MATH-101" />
+                            </div>
+                            <div class="form-text text-muted small-text fs-7">Must be between 5 and 20 characters long.</div>
+                            <span asp-validation-for="SubjectCode" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <hr class="text-muted my-4 opacity-25">
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-light px-4 py-2 rounded-3 fw-medium">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4 py-2 rounded-3 fw-medium shadow-sm">
+                                <i class="bi bi-check-lg me-1"></i> Save Subject
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Activating Client-Side Validation -->
+    <partial name="_ValidationScriptsPartial" />
+}

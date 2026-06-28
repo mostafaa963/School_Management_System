@@ -1,7 +1,7 @@
-﻿@model IEnumerable<Class>
+﻿@model IEnumerable<Subject>
 
 @{
-    ViewData["Title"] = "Manage Classes and Sections";
+    ViewData["Title"] = "Manage Subjects";
 }
 
 @section Styles {
@@ -43,11 +43,11 @@
 <div class="container-fluid pt-4 px-4">
     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
         <div>
-            <h2 class="text-dark fw-extrabold mb-1 tracking-tight">Manage Classes & Sections</h2>
-            <p class="text-muted small mb-0">Browse, filter, and instantly manage school classrooms and capacities.</p>
+            <h2 class="text-dark fw-extrabold mb-1 tracking-tight">Manage Subjects</h2>
+            <p class="text-muted small mb-0">Browse, filter, and manage academic subjects and curriculum codes.</p>
         </div>
         <a asp-action="Create" class="btn btn-primary d-flex align-items-center gap-2 shadow-sm px-4 py-2 rounded-3 fw-medium">
-            <i class="bi bi-plus-lg"></i> Add New Class
+            <i class="bi bi-plus-lg"></i> Add New Subject
         </a>
     </div>
 
@@ -58,7 +58,7 @@
                     <div class="input-group input-group-merge">
                         <span class="input-group-text bg-light border-end-0 text-muted px-3"><i class="bi bi-search"></i></span>
                         <input type="text" name="filter" value="@Context.Request.Query["filter"]"
-                               class="form-control bg-light border-start-0 ps-0 py-2" placeholder="Search by class name..." />
+                               class="form-control bg-light border-start-0 ps-0 py-2" placeholder="Search by subject name or code..." />
                     </div>
                 </div>
                 <div class="col-12 col-md-4">
@@ -78,9 +78,8 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light border-bottom text-uppercase fs-7 text-muted tracking-wider fw-bold">
                         <tr>
-                            <th class="ps-4 py-3">Class Name</th>
-                            <th class="py-3">Section</th>
-                            <th class="py-3">Capacity</th>
+                            <th class="ps-4 py-3">Subject Name</th>
+                            <th class="py-3">Subject Code</th>
                             <th class="text-center py-3" style="width: 180px;">Actions</th>
                         </tr>
                     </thead>
@@ -93,34 +92,28 @@
                                     <td class="ps-4 py-3">
                                         <div class="d-flex align-items-center">
                                             <div class="avatar-sm bg-primary-subtle text-primary rounded-3 p-2 me-3 d-none d-sm-block">
-                                                <i class="bi bi-door-open-fill fs-5"></i>
+                                                <i class="bi bi-book-half fs-5"></i>
                                             </div>
-                                            <span class="fw-semibold text-dark fs-6">@item.ClassName</span>
+                                            <span class="fw-semibold text-dark fs-6">@item.SubjectName</span>
                                         </div>
                                     </td>
                                     <td class="py-3">
-                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-2 fw-medium">
-                                            @item.Section
+                                        <span class="badge bg-dark-subtle text-dark border border-dark-subtle rounded-pill px-3 py-2 fw-medium">
+                                            @item.SubjectCode
                                         </span>
-                                    </td>
-                                    <td class="py-3">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <span class="fw-bold text-dark">@item.Capacity</span> 
-                                            <span class="text-muted small">students max</span>
-                                        </div>
                                     </td>
                                     <td class="py-3 text-center">
                                         <div class="d-flex justify-content-center gap-2">
-                                            <a asp-action="Update" asp-route-id="@item.ClassID" 
-                                               class="btn btn-action btn-outline-warning" title="Edit Class">
+                                            <a asp-action="Update" asp-route-id="@item.SubjectID" 
+                                               class="btn btn-action btn-outline-warning" title="Edit Subject">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
-                                            <a asp-action="Details" asp-route-id="@item.ClassID" 
+                                            <a asp-action="Details" asp-route-id="@item.SubjectID" 
                                                class="btn btn-action btn-outline-info" title="View Details">
                                                 <i class="bi bi-eye-fill"></i>
                                             </a>
-                                            <a asp-action="Delete" asp-route-id="@item.ClassID" 
-                                               class="btn btn-action btn-outline-danger btn-delete" title="Delete Class">
+                                            <a asp-action="Delete" asp-route-id="@item.SubjectID" 
+                                               class="btn btn-action btn-outline-danger btn-delete" title="Delete Subject">
                                                 <i class="bi bi-trash3-fill"></i>
                                             </a>
                                         </div>
@@ -131,7 +124,7 @@
                         else
                         {
                             <tr>
-                                <td colspan="4" class="text-center py-5">
+                                <td colspan="3" class="text-center py-5">
                                     <div class="py-4">
                                         <i class="bi bi-folder-x display-4 text-muted mb-3 d-block"></i>
                                         <h5 class="text-dark fw-bold mb-1">No matches found</h5>
@@ -164,11 +157,11 @@
                 const url = deleteBtn.getAttribute("href");
 
                 Swal.fire({
-                    title: "Delete Class?",
-                    text: "Removing this classroom structure will isolate associated student records. This operation is permanent.",
+                    title: "Delete Subject?",
+                    text: "Removing this subject structure will isolate associated academic records. This operation is permanent.",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: "#dc3545", // Standard Bootstrap Danger
+                    confirmButtonColor: "#dc3545", 
                     cancelButtonColor: "#6c757d",
                     confirmButtonText: "Yes, Delete",
                     cancelButtonText: "Cancel",
@@ -178,7 +171,7 @@
                         confirmButton: 'btn btn-danger px-4 py-2 rounded-3',
                         cancelButton: 'btn btn-secondary px-4 py-2 rounded-3 me-2'
                     },
-                    buttonsStyling: false // Allows bootstrap custom classes to render natively inside Swal
+                    buttonsStyling: false 
                 }).then((result) => {
                     if (result.isConfirmed) {
                         Swal.fire({
