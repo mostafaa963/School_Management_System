@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using School_Management_System.Services.AccountServices;
 using School_Management_System.Services.UnitOfWork;
 using School_Management_System.Utilities;
+using System.Security.Claims;
 
 namespace School_Management_System.Areas.Identity.Controllers
 {
@@ -51,9 +52,12 @@ namespace School_Management_System.Areas.Identity.Controllers
                 await _userManager.FindByNameAsync(userLogin.EmailOrUserName);
             if (userNameOrEmail == null)
                 return NotFound();
-            var checkPassword = await _userManager.CheckPasswordAsync(userNameOrEmail, userLogin.Pssword);
+            //var checkPassword = await _userManager.CheckPasswordAsync(userNameOrEmail, userLogin.Pssword);
+            //List<Claim> claims = [];
 
             var signIn = await _signInManager.PasswordSignInAsync(userNameOrEmail, userLogin.Pssword, userLogin.IsPersistent, true);
+            //await _signInManager.SignInWithClaimsAsync(userNameOrEmail, userLogin.IsPersistent, claims);
+            //var signIn = await _signInManager.PasswordSignInAsync(,);
             if (!signIn.Succeeded)
             {
                 ModelState.AddModelError(userLogin.EmailOrUserName, "User Name or Email is Not Valid");

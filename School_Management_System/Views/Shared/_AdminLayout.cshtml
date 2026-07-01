@@ -244,13 +244,13 @@
             <a class="nav-link @(currentController == "Classes" ? "active" : "")" asp-area="Admin" asp-controller="Classes" asp-action="Index">
                 <i class="bi bi-building"></i> <span>Classes & Sections</span>
             </a>
-            <a class="nav-link @(currentController == "Subject" ? "active" : "")" asp-area="Admin" asp-controller="Subject" asp-action="Index">
+            <a class="nav-link @(currentController == "Subject" ? "active" : "")" asp-area="Admin" asp-controller="Subjects" asp-action="Index">
                 <i class="bi bi-book"></i> <span>Subjects Catalog</span>
             </a>
-            <a class="nav-link @(currentController == "Allocation" ? "active" : "")" asp-area="Admin" asp-controller="Allocation" asp-action="Index">
+            <a class="nav-link @(currentController == "Allocation" ? "active" : "")" asp-area="Admin" asp-controller="TeacherAllocations" asp-action="Index">
                 <i class="bi bi-diagram-3"></i> <span>Teacher Allocations</span>
             </a>
-            <a class="nav-link @(currentController == "Teacher" ? "active" : "")" asp-area="Admin" asp-controller="Teacher" asp-action="Index">
+            <a class="nav-link @(currentController == "Teacher" ? "active" : "")" asp-area="Admin" asp-controller="Teachers" asp-action="Index">
                 <i class="bi bi-person-workspace"></i> <span>Manage Faculty</span>
             </a>
             <a class="nav-link @(currentController == "Student" ? "active" : "")" asp-area="Admin" asp-controller="Student" asp-action="Index">

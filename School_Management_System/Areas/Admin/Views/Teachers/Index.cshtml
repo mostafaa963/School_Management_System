@@ -1,0 +1,197 @@
+﻿@model IEnumerable<Teacher>
+
+@{
+    ViewData["Title"] = "Manage Teachers";
+}
+
+@section Styles {
+    <style>
+        /* Smooth micro-interactions */
+        .table-hover tbody tr {
+            transition: all 0.2s ease-in-out;
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(13, 110, 253, 0.03); 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .search-card {
+            background: #ffffff;
+            backdrop-filter: blur(10px);
+        }
+
+        .tracking-wider {
+            letter-spacing: 0.05em;
+        }
+    </style>
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
+        <div>
+            <h2 class="text-dark fw-extrabold mb-1 tracking-tight">Manage Teachers</h2>
+            <p class="text-muted small mb-0">Browse, filter, and manage academic faculty profiles and qualifications.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary d-flex align-items-center gap-2 shadow-sm px-4 py-2 rounded-3 fw-medium">
+            <i class="bi bi-person-plus-fill"></i> Add New Teacher
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4 rounded-3 search-card">
+        <div class="card-body p-3">
+            <form asp-action="Index" method="get" class="row g-3 align-items-center">
+                <div class="col-12 col-md-5 col-lg-4">
+                    <div class="input-group input-group-merge">
+                        <span class="input-group-text bg-light border-end-0 text-muted px-3"><i class="bi bi-search"></i></span>
+                        <input type="text" name="filter" value="@Context.Request.Query["filter"]"
+                               class="form-control bg-light border-start-0 ps-0 py-2" placeholder="Search by name or qualification..." />
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <button type="submit" class="btn btn-dark px-4 py-2 rounded-3 fw-medium">Filter</button>
+                    @if (!string.IsNullOrEmpty(Context.Request.Query["filter"]))
+                    {
+                        <a asp-action="Index" class="btn btn-link text-secondary link-offset-2 link-underline-opacity-25 ms-2">Reset Filter</a>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light border-bottom text-uppercase fs-7 text-muted tracking-wider fw-bold">
+                        <tr>
+                            <th class="ps-4 py-3">Teacher Name</th>
+                            <th class="py-3">Qualification</th>
+                            <th class="py-3">Phone Number</th>
+                            <th class="py-3">Hire Date</th>
+                            <th class="text-center py-3" style="width: 180px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4 py-3">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-primary-subtle text-primary rounded-3 p-2 me-3 d-none d-sm-block">
+                                                <i class="bi bi-person-badge fs-5"></i>
+                                            </div>
+                                            <div>
+                                                <span class="fw-semibold text-dark fs-6 d-block">@item.FirstName @item.LastName</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-3">
+                                        <span class="badge bg-dark-subtle text-dark border border-dark-subtle rounded-pill px-3 py-1.5 fw-medium">
+                                            @item.Qualification
+                                        </span>
+                                    </td>
+                                    <td class="py-3 text-muted">
+                                        <i class="bi bi-telephone me-1"></i> @item.PhoneNumber
+                                    </td>
+                                    <td class="py-3 text-muted">
+                                        <i class="bi bi-calendar3 me-1"></i> @item.HireDate.ToString("yyyy-MM-dd")
+                                    </td>
+                                    <td class="py-3 text-center">
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <a asp-action="Update" asp-route-id="@item.TeacherID" 
+                                               class="btn btn-action btn-outline-warning" title="Edit Teacher">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+                                            <a asp-action="Details" asp-route-id="@item.TeacherID" 
+                                               class="btn btn-action btn-outline-info" title="View Details">
+                                                <i class="bi bi-eye-fill"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.TeacherID" 
+                                               class="btn btn-action btn-outline-danger btn-delete" title="Delete Teacher">
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <div class="py-4">
+                                        <i class="bi bi-person-x display-4 text-muted mb-3 d-block"></i>
+                                        <h5 class="text-dark fw-bold mb-1">No teachers found</h5>
+                                        <p class="text-muted small mb-0">Try adjusting your keywords or filtering conditions.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_Notification" />
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // SweetAlert Deletion Handler via Event Delegation
+            document.body.addEventListener("click", function (e) {
+                const deleteBtn = e.target.closest(".btn-delete");
+                if (!deleteBtn) return;
+
+                e.preventDefault();
+                const url = deleteBtn.getAttribute("href");
+
+                Swal.fire({
+                    title: "Delete Teacher Profile?",
+                    text: "This will permanently remove this teacher record. Associated class allocations may be unlinked.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#dc3545", 
+                    cancelButtonColor: "#6c757d",
+                    confirmButtonText: "Yes, Delete",
+                    cancelButtonText: "Cancel",
+                    reverseButtons: true,
+                    customClass: {
+                        popup: 'rounded-4 border-0 shadow',
+                        confirmButton: 'btn btn-danger px-4 py-2 rounded-3',
+                        cancelButton: 'btn btn-secondary px-4 py-2 rounded-3 me-2'
+                    },
+                    buttonsStyling: false 
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Processing Deletion",
+                            html: "Updating faculty structures...",
+                            allowOutsideClick: false,
+                            didOpen: () => { Swal.showLoading(); }
+                        });
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+    </script>
+}

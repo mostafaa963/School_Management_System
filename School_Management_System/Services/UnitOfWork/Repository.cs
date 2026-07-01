@@ -81,5 +81,13 @@ namespace School_Management_System.Services.UnitOfWork
 
             return entity;
         }
+
+        public async Task<IEnumerable<object>> SelectAsync(Func<T, object>? selector)
+        {
+            var query = _dbSet.AsQueryable();
+            if (selector is not null)
+                return await Task.FromResult(query.Select(selector).ToList());
+            return await query.ToListAsync();
+        }
     }
 }

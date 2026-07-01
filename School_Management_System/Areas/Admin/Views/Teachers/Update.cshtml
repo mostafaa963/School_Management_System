@@ -1,0 +1,86 @@
+﻿@model UpdateTeacherVM
+
+@{
+    ViewData["Title"] = "Update Teacher";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            
+            <div class="mb-4">
+                <h2 class="text-dark fw-bold mb-1 tracking-tight">Update Teacher Profile</h2>
+                <p class="text-muted small mb-0">Modify professional details and contact information for this instructor.</p>
+            </div>
+
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body p-4">
+                    <form asp-action="Update" method="post" autocomplete="off">
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger small py-2 px-3 mb-4 border-0 rounded-3" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstName" class="form-label fw-semibold text-dark small">First Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-person"></i></span>
+                                    <input asp-for="FirstName" class="form-control bg-light border-start-0 ps-0" placeholder="e.g., Jane" />
+                                </div>
+                                <span asp-validation-for="FirstName" class="text-danger small mt-1 d-block"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="LastName" class="form-label fw-semibold text-dark small">Last Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-person-fill"></i></span>
+                                    <input asp-for="LastName" class="form-control bg-light border-start-0 ps-0" placeholder="e.g., Doe" />
+                                </div>
+                                <span asp-validation-for="LastName" class="text-danger small mt-1 d-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Qualification" class="form-label fw-semibold text-dark small">Qualification</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-mortarboard"></i></span>
+                                    <input asp-for="Qualification" class="form-control bg-light border-start-0 ps-0" placeholder="e.g., M.Sc. in Mathematics" />
+                                </div>
+                                <span asp-validation-for="Qualification" class="text-danger small mt-1 d-block"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PhoneNumber" class="form-label fw-semibold text-dark small">Phone Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-telephone"></i></span>
+                                    <input asp-for="PhoneNumber" class="form-control bg-light border-start-0 ps-0" placeholder="e.g., +123456789" />
+                                </div>
+                                <span asp-validation-for="PhoneNumber" class="text-danger small mt-1 d-block"></span>
+                            </div>
+                        </div>
+
+                        <hr class="text-muted my-4 opacity-25">
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-light px-4 py-2 rounded-3 fw-medium">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4 py-2 rounded-3 fw-medium shadow-sm">
+                                <i class="bi bi-save me-1"></i> Save Changes
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

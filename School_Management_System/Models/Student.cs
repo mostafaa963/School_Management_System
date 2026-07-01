@@ -9,9 +9,6 @@ namespace School_Management_System.Models
         public int StudentID { get; set; }
 
         public string? UserID { get; set; } // Nullable if login account isn't required immediately
-
-      
-
         [Required]
         [StringLength(50)]
         public string FirstName { get; set; }

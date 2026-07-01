@@ -19,5 +19,6 @@ namespace School_Management_System.Services.UnitOfWork
             TypeOfOrder typoOFOrder = TypeOfOrder.Ascending,
             Expression<Func<T, object>>? orderBy = null,
             params Expression<Func<T, object>>[] include);
+         Task<IEnumerable<object>> SelectAsync(Func<T, object>? selector);
     }
 }

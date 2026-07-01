@@ -44,6 +44,8 @@ namespace School_Management_System.Services
                         EmailConfirmed = true,
                     };
                   var result = await userManger.CreateAsync(user, configure.Value.Password);
+                        logger.LogInformation("create Admin User Successfully");
+
                     if (result.Succeeded)
                     {
                         logger.LogInformation("Add Admin User Successfully");

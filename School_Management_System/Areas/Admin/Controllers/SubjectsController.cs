@@ -8,7 +8,7 @@ using System.Numerics;
 namespace School_Management_System.Areas.Admin.Controllers
 {
     [Area(SD.ADMIN_AREA)]
-    [Authorize]
+    [Authorize(Roles = $"{RolesNames.ADMIN_ROLES}")]
     public class SubjectsController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -22,7 +22,7 @@ namespace School_Management_System.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index(string? filter)
         {
-      
+
             var subjects = await _unitOfWork.Subject.GetAllAsync();
             if (filter != null)
                 subjects = subjects.Where(e => e.SubjectName.ToLower().Contains(filter.ToLower().Trim()));
@@ -36,15 +36,16 @@ namespace School_Management_System.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateSubjectVM createSubjectVM)
         {
-            if(!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
                 return View(createSubjectVM);
             }
-           await _unitOfWork.Subject.AddAsync(new Subject()
+            await _unitOfWork.Subject.AddAsync(new Subject()
             {
-                SubjectName=createSubjectVM.SubjectName,
-                SubjectCode= createSubjectVM.SubjectCode,
+                SubjectName = createSubjectVM.SubjectName,
+                SubjectCode = createSubjectVM.SubjectCode,
             });
-           await _unitOfWork.SaveChangeAsync();
+            await _unitOfWork.SaveChangeAsync();
 
             TempData["success_notification"] = "Add Subject Successfully ";
             return RedirectToAction(nameof(Index));
@@ -53,13 +54,14 @@ namespace School_Management_System.Areas.Admin.Controllers
         public async Task<IActionResult> Update(int Id)
         {
             var subject = await _unitOfWork.Subject.GetOneById(Id);
-            if(subject is  null)
-                return NotFound ();
+            if (subject is null)
+                return NotFound();
 
-            var updateSubject = new UpdateSubjectVM {
-              SubjectID = Id,
-              SubjectCode= subject.SubjectCode,
-              SubjectName= subject.SubjectName,
+            var updateSubject = new UpdateSubjectVM
+            {
+                SubjectID = Id,
+                SubjectCode = subject.SubjectCode,
+                SubjectName = subject.SubjectName,
             };
 
             return View(updateSubject);
@@ -67,26 +69,37 @@ namespace School_Management_System.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(UpdateSubjectVM updateSubjectVM)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return View(updateSubjectVM);
             var subject = new Subject
             {
-                SubjectID= updateSubjectVM.SubjectID,
-                SubjectCode= updateSubjectVM.SubjectCode,
-                SubjectName= updateSubjectVM.SubjectName,
+                SubjectID = updateSubjectVM.SubjectID,
+                SubjectCode = updateSubjectVM.SubjectCode,
+                SubjectName = updateSubjectVM.SubjectName,
             };
             _unitOfWork.Subject.Update(subject);
             await _unitOfWork.SaveChangeAsync();
+            TempData["success_notification"] = "Update Subject Successfully ";
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
         public async Task<IActionResult> Details(int Id)
         {
-            var subjectDetails = await _unitOfWork.Subject.GetOneById(Id);
+            var subjectDetails = await _unitOfWork.Subject.GetFirstOne(e => e.SubjectID == Id, true);
             if (subjectDetails is null)
                 return NotFound();
 
             return View(subjectDetails);
+        }
+        public async Task<IActionResult> Delete(int Id)
+        {
+            var subject = await _unitOfWork.Subject.GetOneById(Id);
+            if (subject is null)
+                return NotFound();
+            _unitOfWork.Subject.Delete(subject);
+            await _unitOfWork.SaveChangeAsync();
+            TempData["success_notification"] = "Delete Subject Successfully";
+            return RedirectToAction(nameof(Index));
         }
     }
 }
